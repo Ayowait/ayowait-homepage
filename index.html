@@ -8,19 +8,15 @@
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 
 :root {
-  --term-bg: #0c0c0c;
-  --term-text: #e8e8e8;
   --term-green: #4ec9b0;
   --term-dim: #6a6a6a;
   --term-blue: #569cd6;
   --term-yellow: #dcdcaa;
   --term-red: #f44747;
-  --term-purple: #c586c0;
   --desk-glow: rgba(86, 156, 214, 0.4);
   --desk-surface: rgba(22, 33, 62, 0.65);
   --desk-border: rgba(255, 255, 255, 0.08);
   --mint-green: #87af5f;
-  --mint-dark: #1a1a1a;
 }
 
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
@@ -43,36 +39,131 @@ body {
   position: relative;
   overflow: hidden;
 }
-.hero-content { text-align: center; z-index: 2; }
+
+/* Hero 背景光晕层 */
+.hero-page::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(86,156,214,0.12) 0%, rgba(86,156,214,0.04) 30%, transparent 65%);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: heroGlowPulse 6s ease-in-out infinite;
+}
+
+/* Hero 第二个光晕（偏移色） */
+.hero-page::after {
+  content: '';
+  position: absolute;
+  top: 30%; left: 60%;
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(135,175,95,0.08) 0%, transparent 60%);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: heroGlowFloat 8s ease-in-out infinite;
+}
+
+@keyframes heroGlowPulse {
+  0%,100% { opacity: 0.6; transform: translate(-50%,-50%) scale(1); }
+  50% { opacity: 1; transform: translate(-50%,-50%) scale(1.15); }
+}
+@keyframes heroGlowFloat {
+  0%,100% { opacity: 0.4; transform: translate(0,0) scale(1); }
+  50% { opacity: 0.7; transform: translate(-40px,30px) scale(1.2); }
+}
+
+/* Hero 网格装饰 */
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  mask-image: radial-gradient(ellipse at center, black 20%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 20%, transparent 75%);
+}
+
+.hero-content {
+  text-align: center;
+  z-index: 2;
+  position: relative;
+}
+
+/* >_ 玻璃卡片 */
+.hero-emoji-wrap {
+  display: inline-block;
+  padding: 20px 56px;
+  background: rgba(255,255,255,0.02);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 20px;
+  margin-bottom: 40px;
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  animation: heroCardIn 1s ease 0.3s forwards;
+}
+
+/* 玻璃卡片内部光源 */
+.hero-emoji-wrap::before {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: radial-gradient(circle at 30% 30%, rgba(86,156,214,0.06) 0%, transparent 40%);
+  pointer-events: none;
+}
+
+/* 玻璃卡片底部高光线 */
+.hero-emoji-wrap::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 10%;
+  width: 80%; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(86,156,214,0.3), transparent);
+}
+
+@keyframes heroCardIn {
+  from { opacity:0; transform: scale(0.92) translateY(15px); }
+  to   { opacity:1; transform: scale(1) translateY(0); }
+}
+
 .hero-emoji {
-  font-size: clamp(72px, 18vw, 140px);
+  font-size: clamp(64px, 16vw, 120px);
   font-weight: 200;
   color: #fff;
-  margin-bottom: 48px;
   letter-spacing: -0.08em;
   line-height: 1;
-  opacity: 0;
-  animation: emojiIn 1.2s ease 0.2s forwards;
+  position: relative;
+  z-index: 1;
 }
 .hero-emoji .cursor {
   display: inline-block;
   animation: blink 1s steps(2) infinite;
+  color: rgba(86,156,214,0.9);
 }
+
 .hero-hello {
-  font-size: clamp(18px, 4vw, 28px);
+  font-size: clamp(16px, 3.5vw, 24px);
   font-weight: 300;
-  color: rgba(255,255,255,0.85);
-  letter-spacing: 0.04em;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 0.06em;
   opacity: 0;
   animation: fadeUp 0.8s ease 0.8s forwards;
 }
+
 .scroll-hint {
   position: absolute;
   bottom: 40px;
   left: 50%;
   transform: translateX(-50%);
-  color: rgba(255,255,255,0.3);
-  font-size: 12px;
+  color: rgba(255,255,255,0.25);
+  font-size: 11px;
   letter-spacing: 0.3em;
   text-transform: uppercase;
   opacity: 0;
@@ -82,12 +173,8 @@ body {
   align-items: center;
   gap: 8px;
 }
-.scroll-hint .arrow { font-size: 20px; animation: bounce 2s ease-in-out infinite; }
+.scroll-hint .arrow { font-size: 18px; animation: bounce 2s ease-in-out infinite; }
 
-@keyframes emojiIn {
-  from { opacity:0; transform: scale(0.9) translateY(10px); }
-  to   { opacity:1; transform: scale(1) translateY(0); }
-}
 @keyframes fadeUp {
   from { opacity:0; transform: translateY(20px); }
   to   { opacity:1; transform: translateY(0); }
@@ -98,17 +185,9 @@ body {
 }
 @keyframes blink { 0%,49%{opacity:1;} 50%,100%{opacity:0;} }
 @keyframes bounce { 0%,100%{transform:translateY(0);} 50%{transform:translateY(8px);} }
-@keyframes float {
-  0%,100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
-}
 @keyframes pulseGlow {
   0%,100% { box-shadow: 0 0 20px 2px var(--desk-glow), 0 0 40px 4px rgba(86,156,214,0.15); }
   50% { box-shadow: 0 0 30px 4px var(--desk-glow), 0 0 60px 8px rgba(86,156,214,0.25); }
-}
-@keyframes typeIn {
-  from { width: 0; }
-  to   { width: 100%; }
 }
 
 /* ============ PAGE 2: Mint Desktop ============ */
@@ -125,14 +204,11 @@ body {
   overflow: hidden;
 }
 
-/* 桌面背景装饰光晕 */
 .desktop-page::before {
   content: '';
   position: absolute;
-  top: -100px;
-  right: -100px;
-  width: 400px;
-  height: 400px;
+  top: -100px; right: -100px;
+  width: 400px; height: 400px;
   background: radial-gradient(circle, rgba(86,156,214,0.08) 0%, transparent 70%);
   border-radius: 50%;
   pointer-events: none;
@@ -140,103 +216,68 @@ body {
 .desktop-page::after {
   content: '';
   position: absolute;
-  bottom: -50px;
-  left: -50px;
-  width: 350px;
-  height: 350px;
+  bottom: -50px; left: -50px;
+  width: 350px; height: 350px;
   background: radial-gradient(circle, rgba(135,175,95,0.06) 0%, transparent 70%);
   border-radius: 50%;
   pointer-events: none;
 }
 
-/* 桌面顶部条（模拟 Linux Mint 顶栏） */
 .mint-panel {
-  width: 100%;
-  max-width: 740px;
-  height: 36px;
+  width: 100%; max-width: 740px; height: 36px;
   background: rgba(0,0,0,0.5);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--desk-border);
-  border-bottom: none;
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--desk-border); border-bottom: none;
   border-radius: 10px 10px 0 0;
-  display: flex;
-  align-items: center;
-  padding: 0 16px;
-  gap: 16px;
-  font-size: 12px;
-  color: rgba(255,255,255,0.5);
-  opacity: 0;
-  animation: fadeUp 0.6s ease 0.2s forwards;
+  display: flex; align-items: center;
+  padding: 0 16px; gap: 16px;
+  font-size: 12px; color: rgba(255,255,255,0.5);
+  opacity: 0; animation: fadeUp 0.6s ease 0.2s forwards;
 }
 .mint-panel-left { display: flex; align-items: center; gap: 12px; }
 .mint-panel-center { margin: 0 auto; font-weight: 500; color: rgba(255,255,255,0.7); }
 .mint-panel-right { display: flex; align-items: center; gap: 10px; }
-.mint-menu-btn {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: rgba(255,255,255,0.6);
-  cursor: default;
-}
+.mint-menu-btn { display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.6); }
 .mint-logo-sm {
-  width: 16px; height: 16px;
-  border-radius: 50%;
+  width: 16px; height: 16px; border-radius: 50%;
   background: linear-gradient(135deg, var(--mint-green), #4a7a2a);
   display: flex; align-items: center; justify-content: center;
   font-size: 9px; color: #fff; font-weight: 700;
 }
 .mint-panel-right .icon { font-size: 11px; }
 
-/* 桌面主体区域 */
 .desktop-area {
-  width: 100%;
-  max-width: 740px;
+  width: 100%; max-width: 740px;
   background: var(--desk-surface);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
   border-left: 1px solid var(--desk-border);
   border-right: 1px solid var(--desk-border);
-  display: flex;
-  flex-direction: row;
-  gap: 0;
+  display: flex; flex-direction: row;
   min-height: 460px;
   position: relative;
-  opacity: 0;
-  animation: fadeUp 0.8s ease 0.4s forwards;
+  opacity: 0; animation: fadeUp 0.8s ease 0.4s forwards;
 }
 
-/* 左侧栏 - Dock 样式 */
 .dock {
   width: 64px;
   background: rgba(0,0,0,0.25);
   border-right: 1px solid var(--desk-border);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 16px 0;
-  gap: 14px;
-  flex-shrink: 0;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 16px 0; gap: 14px; flex-shrink: 0;
 }
 .dock-icon {
-  width: 40px; height: 40px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  cursor: pointer;
+  width: 40px; height: 40px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; cursor: pointer;
   transition: all 0.25s ease;
   background: rgba(255,255,255,0.04);
   border: 1px solid rgba(255,255,255,0.06);
-  color: rgba(255,255,255,0.5);
-  position: relative;
+  color: rgba(255,255,255,0.5); position: relative;
 }
 .dock-icon:hover {
   background: rgba(255,255,255,0.1);
   border-color: rgba(255,255,255,0.15);
-  color: #fff;
-  transform: scale(1.1);
+  color: #fff; transform: scale(1.1);
 }
 .dock-icon.active {
   background: rgba(86,156,214,0.12);
@@ -244,97 +285,58 @@ body {
   color: var(--term-blue);
 }
 .dock-icon .badge {
-  position: absolute;
-  top: -2px; right: -2px;
+  position: absolute; top: -2px; right: -2px;
   width: 14px; height: 14px;
-  background: var(--term-red);
-  border-radius: 50%;
-  font-size: 8px;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
+  background: var(--term-red); border-radius: 50%;
+  font-size: 8px; color: #fff;
+  display: flex; align-items: center; justify-content: center; font-weight: 700;
 }
 
-/* 主内容区 */
 .workspace {
-  flex: 1;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  min-width: 0;
+  flex: 1; padding: 24px;
+  display: flex; flex-direction: column;
+  gap: 20px; min-width: 0;
 }
 
-/* 头像 + 欢迎区域 */
 .avatar-section {
-  display: flex;
-  align-items: center;
-  gap: 18px;
+  display: flex; align-items: center; gap: 18px;
   padding-bottom: 20px;
   border-bottom: 1px solid var(--desk-border);
 }
 .avatar-orb {
-  width: 64px; height: 64px;
-  border-radius: 50%;
-  overflow: hidden;
-  flex-shrink: 0;
-  position: relative;
+  width: 64px; height: 64px; border-radius: 50%;
+  overflow: hidden; flex-shrink: 0; position: relative;
   border: 2px solid rgba(86,156,214,0.3);
   animation: pulseGlow 3s ease-in-out infinite;
 }
-.avatar-orb img {
-  width: 100%; height: 100%;
-  object-fit: cover;
-}
+.avatar-orb img { width: 100%; height: 100%; object-fit: cover; }
 .avatar-orb::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
+  content: ''; position: absolute; inset: 0; border-radius: 50%;
   background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.15) 0%, transparent 50%);
   pointer-events: none;
 }
 .welcome-text { flex: 1; min-width: 0; }
-.welcome-text .user {
-  font-size: 15px;
-  font-weight: 600;
-  color: #fff;
-  margin-bottom: 2px;
-}
+.welcome-text .user { font-size: 15px; font-weight: 600; color: #fff; margin-bottom: 2px; }
 .welcome-text .status {
-  font-size: 12px;
-  color: rgba(255,255,255,0.4);
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  font-size: 12px; color: rgba(255,255,255,0.4);
+  display: flex; align-items: center; gap: 6px;
 }
 .status-dot {
-  width: 7px; height: 7px;
-  background: var(--mint-green);
-  border-radius: 50%;
-  box-shadow: 0 0 6px var(--mint-green);
+  width: 7px; height: 7px; background: var(--mint-green);
+  border-radius: 50%; box-shadow: 0 0 6px var(--mint-green);
   animation: blink 2s steps(2) infinite;
 }
 
-/* 终端窗口 */
 .term-window {
   background: rgba(12,12,12,0.85);
   border: 1px solid #1f1f1f;
-  border-radius: 8px;
-  overflow: hidden;
-  font-size: 13px;
-  line-height: 1.65;
-  flex: 1;
-  min-height: 0;
+  border-radius: 8px; overflow: hidden;
+  font-size: 13px; line-height: 1.65;
+  flex: 1; min-height: 0;
 }
 .term-bar {
-  background: #1a1a1a;
-  padding: 7px 12px;
-  display: flex;
-  align-items: center;
-  gap: 7px;
+  background: #1a1a1a; padding: 7px 12px;
+  display: flex; align-items: center; gap: 7px;
   border-bottom: 1px solid #1f1f1f;
 }
 .term-dots { display: flex; gap: 6px; }
@@ -342,54 +344,37 @@ body {
 .term-dots .r { background: #ff5f56; }
 .term-dots .y { background: #ffbd2e; }
 .term-dots .g { background: #27c93f; }
-.term-bar-title {
-  font-size: 11px; color: #555;
-  margin: 0 auto; padding-right: 45px;
-}
-.term-body { padding: 16px; color: var(--term-text); }
+.term-bar-title { font-size: 11px; color: #555; margin: 0 auto; padding-right: 45px; }
+.term-body { padding: 16px; color: #e8e8e8; }
 .term-line { display: block; white-space: pre-wrap; word-break: break-word; }
 .term-user { color: var(--term-green); }
 .term-at { color: var(--term-dim); }
 .term-host { color: var(--term-blue); }
 .term-path { color: var(--term-yellow); }
 .term-dollar { color: var(--term-dim); }
-.term-cmd { color: var(--term-text); }
+.term-cmd { color: #e8e8e8; }
 .term-comment { color: var(--term-dim); font-style: italic; }
 .term-output { color: rgba(255,255,255,0.6); }
-.term-link { color: var(--term-blue); text-decoration: underline; cursor: pointer; }
+.term-link { color: var(--term-blue); text-decoration: underline; }
 .term-cursor {
   display: inline-block; width: 7px; height: 14px;
   background: var(--term-green); vertical-align: middle;
   animation: blink 1s steps(2) infinite;
 }
 
-/* 快捷链接区 */
-.shortcuts {
-  display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-}
+.shortcuts { display: flex; gap: 16px; flex-wrap: wrap; }
 .shortcut {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  text-decoration: none;
-  color: rgba(255,255,255,0.5);
-  transition: color 0.2s;
-  font-size: 10px;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  text-decoration: none; color: rgba(255,255,255,0.5);
+  transition: color 0.2s; font-size: 10px;
 }
 .shortcut:hover { color: #fff; }
 .shortcut-icon {
-  width: 44px; height: 44px;
-  border-radius: 11px;
+  width: 44px; height: 44px; border-radius: 11px;
   background: rgba(255,255,255,0.05);
   border: 1px solid rgba(255,255,255,0.08);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  transition: all 0.2s;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; transition: all 0.2s;
 }
 .shortcut:hover .shortcut-icon {
   background: rgba(255,255,255,0.1);
@@ -397,78 +382,44 @@ body {
   transform: translateY(-2px);
 }
 
-/* 底部任务栏 */
 .mint-taskbar {
-  width: 100%;
-  max-width: 740px;
-  height: 40px;
+  width: 100%; max-width: 740px; height: 40px;
   background: rgba(0,0,0,0.5);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--desk-border);
-  border-top: none;
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--desk-border); border-top: none;
   border-radius: 0 0 10px 10px;
-  display: flex;
-  align-items: center;
-  padding: 0 12px;
-  gap: 8px;
-  font-size: 11px;
-  color: rgba(255,255,255,0.4);
-  opacity: 0;
-  animation: fadeUp 0.6s ease 0.6s forwards;
+  display: flex; align-items: center;
+  padding: 0 12px; gap: 8px;
+  font-size: 11px; color: rgba(255,255,255,0.4);
+  opacity: 0; animation: fadeUp 0.6s ease 0.6s forwards;
 }
-.task-item {
-  padding: 4px 10px;
-  border-radius: 6px;
-  transition: all 0.2s;
-}
+.task-item { padding: 4px 10px; border-radius: 6px; transition: all 0.2s; }
 .task-item.active {
   background: rgba(86,156,214,0.1);
   color: rgba(255,255,255,0.8);
   border-bottom: 2px solid var(--term-blue);
 }
 .task-sep { color: rgba(255,255,255,0.15); margin: 0 2px; }
-.task-clock {
-  margin-left: auto;
-  font-variant-numeric: tabular-nums;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+.task-clock { margin-left: auto; font-variant-numeric: tabular-nums; display: flex; align-items: center; gap: 8px; }
 .task-clock .date { color: rgba(255,255,255,0.3); }
 
-/* 桌面装饰文字 */
 .desktop-label {
   margin-top: 20px;
-  font-size: 11px;
-  color: rgba(255,255,255,0.15);
-  letter-spacing: 0.1em;
-  text-align: center;
-  opacity: 0;
-  animation: fadeIn 1s ease 1s forwards;
+  font-size: 11px; color: rgba(255,255,255,0.15);
+  letter-spacing: 0.1em; text-align: center;
+  opacity: 0; animation: fadeIn 1s ease 1s forwards;
 }
-.desktop-label a {
-  color: rgba(255,255,255,0.2);
-  text-decoration: none;
-  border-bottom: 1px dotted rgba(255,255,255,0.1);
-}
+.desktop-label a { color: rgba(255,255,255,0.2); text-decoration: none; border-bottom: 1px dotted rgba(255,255,255,0.1); }
 
-/* Mobile */
 @media (max-width: 640px) {
-  .hero-emoji { font-size: 80px; margin-bottom: 32px; }
+  .hero-emoji { font-size: 72px; }
+  .hero-emoji-wrap { padding: 16px 40px; margin-bottom: 32px; }
+  .hero-hello { font-size: 16px; }
   .desktop-page { padding: 32px 10px 0; }
   .mint-panel { height: 32px; font-size: 10px; padding: 0 10px; gap: 10px; }
   .mint-panel-center { font-size: 11px; }
   .desktop-area { flex-direction: column; min-height: auto; }
-  .dock {
-    width: 100%; height: 56px;
-    flex-direction: row;
-    border-right: none;
-    border-bottom: 1px solid var(--desk-border);
-    padding: 8px 12px;
-    gap: 10px;
-    overflow-x: auto;
-  }
+  .dock { width: 100%; height: 56px; flex-direction: row; border-right: none; border-bottom: 1px solid var(--desk-border); padding: 8px 12px; gap: 10px; overflow-x: auto; }
   .dock-icon { width: 36px; height: 36px; font-size: 16px; flex-shrink: 0; }
   .workspace { padding: 16px; }
   .avatar-orb { width: 52px; height: 52px; }
@@ -489,8 +440,11 @@ body {
 
 <!-- ============ PAGE 1: Hero ============ -->
 <section class="hero-page">
+  <div class="hero-grid"></div>
   <div class="hero-content">
-    <div class="hero-emoji">&gt;<span class="cursor">_</span></div>
+    <div class="hero-emoji-wrap">
+      <div class="hero-emoji">&gt;<span class="cursor">_</span></div>
+    </div>
     <div class="hero-hello">Hello, I am Ayowait</div>
   </div>
   <div class="scroll-hint">
@@ -502,7 +456,6 @@ body {
 <!-- ============ PAGE 2: Mint Desktop ============ -->
 <section class="desktop-page">
 
-  <!-- 顶部面板 -->
   <div class="mint-panel">
     <div class="mint-panel-left">
       <div class="mint-menu-btn">
@@ -518,12 +471,9 @@ body {
     </div>
   </div>
 
-  <!-- 桌面主区域 -->
   <div class="desktop-area">
 
-    <!-- 左侧 Dock -->
     <div class="dock">
-      <!-- 头像作为应用图标 -->
       <div class="dock-icon active" style="overflow:hidden; padding:0; border:2px solid rgba(86,156,214,0.4);" title="Ayowait">
         <img src="https://avatars.githubusercontent.com/u/313487724?v=4" alt="Ayowait" style="width:100%;height:100%;object-fit:cover;border-radius:8px;" onerror="this.style.display='none'">
       </div>
@@ -539,10 +489,8 @@ body {
       </div>
     </div>
 
-    <!-- 工作区 -->
     <div class="workspace">
 
-      <!-- 头像 + 欢迎区 -->
       <div class="avatar-section">
         <div class="avatar-orb">
           <img src="https://avatars.githubusercontent.com/u/313487724?v=4" alt="Ayowait" onerror="this.style.display='none'">
@@ -556,7 +504,6 @@ body {
         </div>
       </div>
 
-      <!-- 终端窗口 -->
       <div class="term-window">
         <div class="term-bar">
           <div class="term-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
@@ -578,7 +525,6 @@ body {
         </div>
       </div>
 
-      <!-- 快捷链接 -->
       <div class="shortcuts">
         <a href="https://github.com/Ayowait" target="_blank" rel="noopener" class="shortcut">
           <div class="shortcut-icon">
@@ -603,7 +549,6 @@ body {
     </div>
   </div>
 
-  <!-- 底部任务栏 -->
   <div class="mint-taskbar">
     <span class="task-item active">&#128187; Desktop</span>
     <span class="task-sep">|</span>
@@ -616,7 +561,6 @@ body {
     </div>
   </div>
 
-  <!-- 底部署名 -->
   <div class="desktop-label">
     Powered by <a href="https://pages.github.com" target="_blank" rel="noopener">GitHub Pages</a> &middot; Ayowait OS v1.0
   </div>
