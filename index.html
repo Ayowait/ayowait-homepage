@@ -320,7 +320,7 @@ body {
   .desktop-page { padding: 24px 10px 0; }
   .mint-panel { height: 32px; font-size: 10px; padding: 0 10px; gap: 10px; }
   .mint-panel-center { font-size: 11px; }
-  .desktop-area { flex-direction: column; min-height: auto; }
+  .desktop-area { flex-direction: row; min-height: 360px; }
   .dock { width: 100%; height: 56px; flex-direction: row; border-right: none; border-bottom: 1px solid var(--desk-border); padding: 8px 12px; gap: 10px; overflow-x: auto; }
   .dock-icon { width: 36px; height: 36px; font-size: 16px; flex-shrink: 0; }
   .workspace { padding: 16px; }
@@ -410,17 +410,8 @@ body {
           <span class="live-term-title">ayowait@github: ~</span>
         </div>
         <div class="live-term-body" id="live-term"></div>
-      </div>
-      <div class="shortcuts">
-        <a href="https://github.com/Ayowait" target="_blank" rel="noopener" class="shortcut">
-          <div class="shortcut-icon"><svg viewBox="0 0 24 24" width="22" height="22" style="fill:currentColor;"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.225 1.905 1.225 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg></div>
-          <span>GitHub</span>
-        </a>
-        <a href="#" class="shortcut"><div class="shortcut-icon">&#128193;</div><span>Files</span></a>
-        <a href="#" class="shortcut"><div class="shortcut-icon">&#9881;</div><span>Settings</span></a>
-        <a href="#" class="shortcut"><div class="shortcut-icon">&#9993;</div><span>Email</span></a>
-      </div>
     </div>
+  </div>
   </div>
   <div class="mint-taskbar">
     <span class="task-item active">&#128187; Desktop</span>
@@ -430,7 +421,7 @@ body {
     <span class="task-item">&#9881; Settings</span>
     <div class="task-clock"><span class="date" id="date-text"></span><span id="clock">00:00</span></div>
   </div>
-  <div class="desktop-label">Powered by <a href="https://pages.github.com" target="_blank" rel="noopener">GitHub Pages</a> &middot; Ayowait OS v1.0</div>
+
 </section>
 
 <!-- PAGE 3: About -->
@@ -483,16 +474,6 @@ updateClock();
     {html:'<span class="lt-green">  (___    ___)</span>    <span class="lt-yellow">Editor</span>: VS Code + Vim', delay: 50},
     {html:'<span class="lt-green">  (___|  |___)</span>    <span class="lt-yellow">Theme</span>: Dark / Minimal', delay: 50},
     {html:'<span class="lt-green">  (___|  |___)</span>    <span class="lt-yellow">Coffee</span>: <span class="lt-green">always</span>', delay: 50},
-    {html:'', delay: 100},
-    {html:'<span class="lt-user">ayowait</span><span class="lt-at">@</span><span class="lt-host">github</span><span class="lt-dim">:</span><span class="lt-path">~</span><span class="lt-dollar">$</span> <span class="lt-cmd">cat skills.txt</span>', delay: 300},
-    {html:'<span class="lt-comment"># things I work with</span>', delay: 80},
-    {html:'<span class="lt-green">languages</span>:   JavaScript, Python, HTML/CSS, Bash', delay: 60},
-    {html:'<span class="lt-green">tools</span>:       Git, VS Code, Vim, Docker', delay: 60},
-    {html:'<span class="lt-green">interests</span>:   Minimal design, Automation, AI tools', delay: 60},
-    {html:'', delay: 100},
-    {html:'<span class="lt-user">ayowait</span><span class="lt-at">@</span><span class="lt-host">github</span><span class="lt-dim">:</span><span class="lt-path">~</span><span class="lt-dollar">$</span> <span class="lt-cmd">echo $GREETING</span>', delay: 300},
-    {html:'<span class="lt-purple">Thanks for scrolling all the way down.</span>', delay: 50},
-    {html:'<span class="lt-purple">Feel free to reach out on GitHub.</span>', delay: 50},
     {html:'', delay: 100},
     {html:'<span class="lt-user">ayowait</span><span class="lt-at">@</span><span class="lt-host">github</span><span class="lt-dim">:</span><span class="lt-path">~</span><span class="lt-dollar">$</span> <span class="lt-cursor"></span>', delay: 300},
   ];
