@@ -34,6 +34,7 @@
   --glow-mint: rgba(135,175,95,0.1);
   --grid-line: rgba(255,255,255,0.02);
   --hero-grad: rgba(10,10,18,0.9);
+  --dot-ring: rgba(255,255,255,0.4);
 }
 /* ============ 浅色主题 ============ */
 html.light {
@@ -95,19 +96,29 @@ body {
   to   { opacity:1; transform: translateY(0) scale(1); }
 }
 
-/* ============ 主题切换按钮（右上角，全页常驻） ============ */
-.theme-btn {
+/* ============ 主题切换按钮（Codex 同款三色点，右上角常驻） ============ */
+.theme-dots {
   position: fixed; top: 20px; right: 20px; z-index: 999;
-  width: 44px; height: 44px; border-radius: 50%;
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 10px; border-radius: 999px;
   background: var(--glass-bg);
   backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--glass-border);
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer; transition: all 0.3s ease;
+  transition: background 0.4s ease, border-color 0.4s ease;
 }
-.theme-btn:hover { transform: scale(1.08); border-color: rgba(86,156,214,0.4); }
-.theme-btn svg { width: 22px; height: 22px; stroke: var(--text); transition: transform 0.5s cubic-bezier(0.22,1,0.36,1); }
-.theme-btn:active svg { transform: rotate(90deg); }
+.theme-dot {
+  width: 13px; height: 13px; border-radius: 50%; border: none; padding: 0;
+  cursor: pointer; position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.theme-dot:hover { transform: scale(1.25); }
+.theme-dot:active { transform: scale(0.95); }
+/* 激活态：外圈光环 */
+.theme-dot.on { box-shadow: 0 0 0 2px var(--bg), 0 0 0 3.5px var(--dot-ring), 0 0 10px 1px currentColor; }
+.dot-red    { background: #ff5f56; color: #ff5f56; }
+.dot-yellow { background: #ffbd2e; color: #ffbd2e; }
+.dot-green  { background: #27c93f; color: #27c93f; }
 
 /* ============ PAGE 1: Hero ============ */
 .hero-page {
@@ -366,7 +377,8 @@ body {
   .hero-emoji-wrap { padding: 18px 48px; margin-bottom: 36px; border-radius: 20px; }
   .hero-hello { font-size: 15px; }
   .scroll-gradient { height: 80px; }
-  .theme-btn { top: 14px; right: 14px; width: 40px; height: 40px; }
+  .theme-dots { top: 14px; right: 14px; padding: 6px 8px; gap: 7px; }
+  .theme-dot { width: 12px; height: 12px; }
   .desktop-page { padding: 24px 10px 0; }
   .mint-panel { height: 32px; font-size: 10px; padding: 0 10px; gap: 10px; }
   .mint-panel-center { font-size: 11px; }
@@ -399,19 +411,12 @@ body {
 </head>
 <body>
 
-<!-- 主题切换按钮：线条太阳/月亮 -->
-<button class="theme-btn" id="themeBtn" aria-label="Toggle theme">
-  <!-- 深色模式显示太阳（点击变浅色） -->
-  <svg id="iconSun" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="12" cy="12" r="4.2"/>
-    <path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.5 1.5M17.2 17.2l1.5 1.5M18.7 5.3l-1.5 1.5M6.8 17.2l-1.5 1.5"/>
-  </svg>
-  <!-- 浅色模式显示月亮 -->
-  <svg id="iconMoon" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="display:none">
-    <path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z"/>
-    <path d="M17 4l.4 1.2 1.2.4-1.2.4L17 7.2l-.4-1.2-1.2-.4 1.2-.4z"/>
-  </svg>
-</button>
+<!-- 主题切换：Codex 同款三色点（红=深色 黄=跟随系统 绿=浅色） -->
+<div class="theme-dots" id="themeDots" role="group" aria-label="Theme">
+  <button class="theme-dot dot-red"    data-theme="dark"  aria-label="Dark theme"  title="深色"></button>
+  <button class="theme-dot dot-yellow" data-theme="auto"  aria-label="Auto theme"  title="跟随系统"></button>
+  <button class="theme-dot dot-green"  data-theme="light" aria-label="Light theme" title="浅色"></button>
+</div>
 
 <!-- PAGE 1: Hero -->
 <section class="hero-page">
@@ -510,28 +515,46 @@ body {
 </section>
 
 <script>
-/* ===== 主题切换 ===== */
+/* ===== 主题切换（三色点：红=深色 黄=跟随系统 绿=浅色） ===== */
 (function() {
-  var btn = document.getElementById('themeBtn');
-  var sun = document.getElementById('iconSun');
-  var moon = document.getElementById('iconMoon');
-  var saved = null;
-  try { saved = localStorage.getItem('theme'); } catch(e) {}
-  if (saved === 'light') document.documentElement.classList.add('light');
-  updateIcon();
+  var dots = document.querySelectorAll('.theme-dot');
+  var mq = window.matchMedia('(prefers-color-scheme: light)');
+  var mediaHandler = null;
 
-  btn.addEventListener('click', function() {
-    document.documentElement.classList.toggle('light');
-    var isLight = document.documentElement.classList.contains('light');
-    try { localStorage.setItem('theme', isLight ? 'light' : 'dark'); } catch(e) {}
-    updateIcon();
+  function apply(mode) {
+    var light = mode === 'light' || (mode === 'auto' && mq.matches);
+    document.documentElement.classList.toggle('light', light);
+    dots.forEach(function(d) {
+      d.classList.toggle('on', d.dataset.theme === mode);
+    });
+  }
+
+  function currentMode() {
+    var saved = null;
+    try { saved = localStorage.getItem('theme'); } catch(e) {}
+    return saved || 'dark';
+  }
+
+  // 黄点（auto）：监听系统主题变化，实时跟随
+  function bindAuto() {
+    if (mediaHandler) mq.removeEventListener('change', mediaHandler);
+    if (currentMode() === 'auto') {
+      mediaHandler = function() { apply('auto'); };
+      mq.addEventListener('change', mediaHandler);
+    }
+  }
+
+  dots.forEach(function(d) {
+    d.addEventListener('click', function() {
+      var mode = d.dataset.theme;
+      try { localStorage.setItem('theme', mode); } catch(e) {}
+      apply(mode);
+      bindAuto();
+    });
   });
 
-  function updateIcon() {
-    var isLight = document.documentElement.classList.contains('light');
-    sun.style.display = isLight ? 'none' : 'block';
-    moon.style.display = isLight ? 'block' : 'none';
-  }
+  apply(currentMode());
+  bindAuto();
 })();
 
 /* ===== 时钟 ===== */
