@@ -20,11 +20,16 @@
   --mint-green: #87af5f;
 }
 
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; scroll-snap-type: y mandatory; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 
 body {
   font-family: 'SF Mono', 'Fira Code', 'JetBrains Mono', Consolas, 'Liberation Mono', monospace;
   background: #000; color: #fff; overflow-x: hidden;
+}
+
+/* 滚动吸附 - JS 平滑实现，比原生 scroll-snap 优雅 */
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-snap-type: y proximity; }
 }
 
 @keyframes fadeUp { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);} }
@@ -466,14 +471,28 @@ updateClock();
     {html:'', delay: 100},
     {html:'<span class="lt-green">       ___</span>        <span class="lt-blue">ayowait</span><span class="lt-dim">@</span><span class="lt-blue">github</span>', delay: 50},
     {html:'<span class="lt-green">      (.. \\</span>      <span class="lt-dim">-----------</span>', delay: 50},
-    {html:'<span class="lt-green">      (___ |</span>      <span class="lt-yellow">OS</span>: Ayowait OS 1.0', delay: 50},
+    {html:'<span class="lt-green">      (___ |</span>      <span class="lt-yellow">OS</span>: Ayowait OS 1.0 x86_64', delay: 50},
     {html:'<span class="lt-green">      _  __)</span>      <span class="lt-yellow">Host</span>: GitHub Pages', delay: 50},
-    {html:'<span class="lt-green">     (____)</span>       <span class="lt-yellow">Kernel</span>: HTML5 + CSS3', delay: 50},
+    {html:'<span class="lt-green">     (____)</span>       <span class="lt-yellow">Kernel</span>: HTML5-CSS3-JS', delay: 50},
     {html:'<span class="lt-green">    (______)</span>      <span class="lt-yellow">Uptime</span>: <span id="lt-uptime">0s</span>', delay: 50},
-    {html:'<span class="lt-green">   ___|___|__</span>     <span class="lt-yellow">Shell</span>: bash 5.2', delay: 50},
-    {html:'<span class="lt-green">  (___    ___)</span>    <span class="lt-yellow">Editor</span>: VS Code + Vim', delay: 50},
-    {html:'<span class="lt-green">  (___|  |___)</span>    <span class="lt-yellow">Theme</span>: Dark / Minimal', delay: 50},
+    {html:'<span class="lt-green">   ___|___|__</span>     <span class="lt-yellow">Packages</span>: 42 (dpkg), 7 (npm)', delay: 50},
+    {html:'<span class="lt-green">  (___    ___)</span>    <span class="lt-yellow">Shell</span>: bash 5.2.15', delay: 50},
+    {html:'<span class="lt-green">  (___|  |___)</span>    <span class="lt-yellow">Resolution</span>: responsive', delay: 50},
+    {html:'<span class="lt-green">  (___|  |___)</span>    <span class="lt-yellow">DE</span>: Mint Glass 20.3', delay: 50},
+    {html:'<span class="lt-green">  (___|  |___)</span>    <span class="lt-yellow">WM</span>: Mutter (XTerm.js)', delay: 50},
+    {html:'<span class="lt-green">  (___|  |___)</span>    <span class="lt-yellow">Theme</span>: Dark / Minimal [GTK3]', delay: 50},
+    {html:'<span class="lt-green">  (___|  |___)</span>    <span class="lt-yellow">Icons</span>: Papirus-Dark', delay: 50},
+    {html:'<span class="lt-green">  (___|  |___)</span>    <span class="lt-yellow">Terminal</span>: gnome-terminal', delay: 50},
+    {html:'<span class="lt-green">  (___|  |___)</span>    <span class="lt-yellow">CPU</span>: render engine (virtual)', delay: 50},
+    {html:'<span class="lt-green">  (___|  |___)</span>    <span class="lt-yellow">GPU</span>: Canvas 2D / WebGL', delay: 50},
+    {html:'<span class="lt-green">  (___|  |___)</span>    <span class="lt-yellow">Memory</span>: 512MiB / 4096MiB', delay: 50},
     {html:'<span class="lt-green">  (___|  |___)</span>    <span class="lt-yellow">Coffee</span>: <span class="lt-green">always</span>', delay: 50},
+    {html:'', delay: 150},
+    {html:'<span class="lt-user">ayowait</span><span class="lt-at">@</span><span class="lt-host">github</span><span class="lt-dim">:</span><span class="lt-path">~</span><span class="lt-dollar">$</span> <span class="lt-cmd">dmesg | tail -4</span>', delay: 300},
+    {html:'<span class="lt-dim">[  0.000000] </span><span class="lt-output">Booting Ayowait OS on github.io ...</span>', delay: 60},
+    {html:'<span class="lt-dim">[  0.318241] </span><span class="lt-output">theme: glassmorphism module loaded</span>', delay: 60},
+    {html:'<span class="lt-dim">[  0.712005] </span><span class="lt-output">dock: avatar registered as app icon</span>', delay: 60},
+    {html:'<span class="lt-dim">[  1.204859] </span><span class="lt-output">system ready. welcome, visitor.</span>', delay: 60},
     {html:'', delay: 100},
     {html:'<span class="lt-user">ayowait</span><span class="lt-at">@</span><span class="lt-host">github</span><span class="lt-dim">:</span><span class="lt-path">~</span><span class="lt-dollar">$</span> <span class="lt-cursor"></span>', delay: 300},
   ];
@@ -520,6 +539,66 @@ updateClock();
       el.textContent = s + 's';
     }
   }, 1000);
+})();
+
+// ===== 平滑滚动吸附（手机端修复）=====
+// 原生 scroll-snap 在手机上会有"拉一下卡住"的问题
+// 这里用 wheel/touch 检测 + smooth scroll 到目标页
+(function() {
+  var pages = document.querySelectorAll('.hero-page, .desktop-page, .about-page');
+  if (!pages.length) return;
+
+  var currentIdx = 0;
+  var isAnimating = false;
+  var touchStartY = 0;
+  var isMobile = 'ontouchstart' in window;
+
+  function scrollTo(idx) {
+    if (idx < 0 || idx >= pages.length || isAnimating) return;
+    isAnimating = true;
+    currentIdx = idx;
+    pages[idx].scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // 等滚动完成（估个时间），期间忽略新输入
+    setTimeout(function() { isAnimating = false; }, 700);
+  }
+
+  if (isMobile) {
+    // 手机：监听 touchend，根据滑动方向和距离决定翻页
+    document.addEventListener('touchstart', function(e) {
+      touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    document.addEventListener('touchend', function(e) {
+      if (isAnimating) return;
+      var dy = touchStartY - e.changedTouches[0].clientY;
+      // 轻扫超过 60px 就翻一页
+      if (Math.abs(dy) > 60) {
+        if (dy > 0) scrollTo(currentIdx + 1);
+        else scrollTo(currentIdx - 1);
+      }
+    }, { passive: true });
+  } else {
+    // 电脑：wheel 事件
+    var wheelLock = false;
+    document.addEventListener('wheel', function(e) {
+      if (isAnimating || wheelLock) return;
+      wheelLock = true;
+      setTimeout(function() { wheelLock = false; }, 100);
+      if (e.deltaY > 30) scrollTo(currentIdx + 1);
+      else if (e.deltaY < -30) scrollTo(currentIdx - 1);
+    }, { passive: true });
+  }
+
+  // 更新当前页索引（用户手动滚动到中间态时纠正）
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+        var idx = Array.prototype.indexOf.call(pages, entry.target);
+        if (!isAnimating) currentIdx = idx;
+      }
+    });
+  }, { threshold: [0.5] });
+  pages.forEach(function(p) { observer.observe(p); });
 })();
 </script>
 </body>
