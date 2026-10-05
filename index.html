@@ -308,7 +308,7 @@ html.light .desktop-page::after { opacity: 1.3; }
 .live-term-title { font-size: 11px; color: rgba(255,255,255,0.36); letter-spacing: 0.02em; margin: 0 auto; padding-right: 45px; }
 .live-term-body {
   padding: 16px; color: #e8e8e8; font-size: 12px; line-height: 1.55;
-  overflow-y: auto; overflow-x: hidden; max-height: 400px; overscroll-behavior: contain;
+  overflow-y: auto; overflow-x: hidden; max-height: 440px; overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch; scrollbar-width: thin;
   scrollbar-color: rgba(255,255,255,0.18) transparent;
 }
@@ -432,9 +432,9 @@ html.light .about-page::before { opacity: 1.3; }
   .avatar-orb { width: 48px; height: 48px; }
   .welcome-text .user { font-size: 14px; }
   .welcome-text .status { font-size: 10px; }
-  .live-term-body { padding: 12px 10px; font-size: 9px; max-height: 350px; line-height: 1.45; }
+  .live-term-body { padding: 12px 10px; font-size: 8.5px; max-height: 460px; line-height: 1.4; }
   .lt-neofetch { grid-template-columns: 1fr; gap: 12px; align-items: start; padding-top: 4px; }
-  .lt-debian-logo { font-size: 0.98em; line-height: 1.04; }
+  .lt-debian-logo { font-size: 0.92em; line-height: 1.04; }
   .lt-system-info { display: grid; grid-template-columns: 1fr; }
   .lt-info-line { white-space: normal; min-height: 1.55em; overflow: visible; text-overflow: clip; }
   .live-term-dots span { width: 9px; height: 9px; }
@@ -622,7 +622,7 @@ updateClock();
     {html: '', delay: 100},
     {html:'<div class="lt-neofetch"><pre class="lt-debian-logo">       _,met$$$$$gg.&#10;    ,g$$$$$$$$$$$$$$$P.&#10;  ,g$$P"        """Y$.".&#10; ,$$P&#39;              `$$$.&#10;&#39;,$$P       ,ggs.     `$$b:&#10;`d$$&#39;     ,$P&#39;   .    $$$&#10; $$P      d$&#39;     ,    $$P&#10; $$:      $.   -    ,d$$&#39;&#10; $$;      Y$b._   _,d$P&#39;&#10; Y$$.    `.`"Y$$$$P"&#39;&#10; `$$b      "-.__&#10;  `Y$$&#10;   `Y$$.&#10;     `$$b.&#10;       `Y$$b.&#10;          `"Y$b._&#10;              `"""</pre><div class="lt-system-info"><div class="lt-info-line lt-info-head" style="animation-delay:0.35s"><span class="lt-blue">ayowait</span><span class="lt-dim">@</span><span class="lt-blue">github</span></div><div class="lt-info-line" style="animation-delay:0.43s"><span class="lt-dim">-----------</span></div><div class="lt-info-line" style="animation-delay:0.51s"><span class="lt-yellow">OS</span>: Ayowait OS 1.0 x86_64</div><div class="lt-info-line" style="animation-delay:0.59s"><span class="lt-yellow">Host</span>: GitHub Pages</div><div class="lt-info-line" style="animation-delay:0.67s"><span class="lt-yellow">Kernel</span>: HTML5-CSS3-JS</div><div class="lt-info-line" style="animation-delay:0.75s"><span class="lt-yellow">Uptime</span>: <span id="lt-uptime">0s</span></div><div class="lt-info-line" style="animation-delay:0.83s"><span class="lt-yellow">Packages</span>: 42 (dpkg), 7 (npm)</div><div class="lt-info-line" style="animation-delay:0.91s"><span class="lt-yellow">Shell</span>: bash 5.2.15</div><div class="lt-info-line" style="animation-delay:0.99s"><span class="lt-yellow">Resolution</span>: responsive</div><div class="lt-info-line" style="animation-delay:1.07s"><span class="lt-yellow">DE</span>: Mint Glass 20.3</div><div class="lt-info-line" style="animation-delay:1.15s"><span class="lt-yellow">WM</span>: Mutter (XTerm.js)</div><div class="lt-info-line" style="animation-delay:1.23s"><span class="lt-yellow">Theme</span>: Dark / Minimal [GTK3]</div><div class="lt-info-line" style="animation-delay:1.31s"><span class="lt-yellow">Icons</span>: Papirus-Dark</div><div class="lt-info-line" style="animation-delay:1.39s"><span class="lt-yellow">Terminal</span>: gnome-terminal</div><div class="lt-info-line" style="animation-delay:1.47s"><span class="lt-yellow">CPU</span>: render engine (virtual)</div><div class="lt-info-line" style="animation-delay:1.55s"><span class="lt-yellow">GPU</span>: Canvas 2D / WebGL</div><div class="lt-info-line" style="animation-delay:1.63s"><span class="lt-yellow">Coffee</span>: <span class="lt-green">always</span></div></div></div>', delay: 80},
     {html: '', delay: 200},
-    {html: U + '<span class="lt-cmd">dmesg | tail -6</span>', delay: 400},
+    {html: U + '<span class="lt-cmd">dmesg | tail -6</span>', delay: 2100},
     {html:'<span class="lt-dim">[    0.000000]</span> <span class="lt-output">Booting Ayowait OS on github.io ...</span>', delay: 90},
     {html:'<span class="lt-dim">[    0.118334]</span> <span class="lt-output">kernel: page cache warm, css loaded</span>', delay: 90},
     {html:'<span class="lt-dim">[    0.318241]</span> <span class="lt-output">theme: glassmorphism module loaded</span>', delay: 90},
@@ -643,7 +643,6 @@ updateClock();
     div.className = 'lt-line' + (lines[i].html === '' ? ' lt-empty' : '');
     div.innerHTML = lines[i].html;
     container.appendChild(div);
-    container.scrollTop = container.scrollHeight;
     setTimeout(function() { typeNext(i + 1); }, lines[i].delay);
   }
 
