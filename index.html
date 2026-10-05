@@ -32,6 +32,9 @@
   --glass-border: rgba(255,255,255,0.08);
   --glow-blue: rgba(86,156,214,0.15);
   --glow-mint: rgba(135,175,95,0.1);
+  --glow-core: rgba(86,156,214,0.10);
+  --glow-ring: rgba(86,156,214,0.06);
+  --glow-fade: 0.85;
   --grid-line: rgba(255,255,255,0.02);
   --hero-grad: rgba(10,10,18,0.9);
   --dot-ring: rgba(255,255,255,0.4);
@@ -48,8 +51,13 @@ html.light {
   --glass-border: rgba(0,0,0,0.1);
   --glow-blue: rgba(86,156,214,0.18);
   --glow-mint: rgba(135,175,95,0.15);
+  --glow-core: rgba(86,156,214,0.14);
+  --glow-ring: rgba(70,110,160,0.10);
+  --glow-fade: 1;
   --grid-line: rgba(0,0,0,0.04);
   --hero-grad: rgba(240,240,244,0.9);
+  --desk-glow: rgba(86, 156, 214, 0.16);
+  --dot-ring: rgba(0,0,0,0.35);
 }
 
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
@@ -76,12 +84,12 @@ body {
 @keyframes blink { 0%,49%{opacity:1;} 50%,100%{opacity:0;} }
 @keyframes bounce { 0%,100%{transform:translateY(0);} 50%{transform:translateY(10px);} }
 @keyframes pulseGlow {
-  0%,100% { box-shadow: 0 0 20px 2px var(--desk-glow), 0 0 40px 4px rgba(86,156,214,0.15); }
-  50% { box-shadow: 0 0 30px 4px var(--desk-glow), 0 0 60px 8px rgba(86,156,214,0.25); }
+  0%,100% { box-shadow: 0 0 20px 2px var(--desk-glow), 0 0 40px 4px var(--glow-ring); }
+  50% { box-shadow: 0 0 30px 4px var(--desk-glow), 0 0 60px 8px var(--glow-core); }
 }
 @keyframes heroGlowPulse {
-  0%,100% { opacity: 0.7; transform: translate(-50%,-50%) scale(1); }
-  50% { opacity: 1; transform: translate(-50%,-50%) scale(1.15); }
+  0%,100% { opacity: calc(var(--glow-fade) * 0.7); transform: translate(-50%,-50%) scale(1); }
+  50% { opacity: var(--glow-fade); transform: translate(-50%,-50%) scale(1.15); }
 }
 @keyframes heroGlowFloat {
   0%,100% { opacity: 0.5; transform: translate(0,0) scale(1); }
@@ -126,7 +134,7 @@ body {
   content: ''; position: absolute; top: 50%; left: 50%;
   transform: translate(-50%, -50%);
   width: min(700px, 80vw); height: min(700px, 80vw);
-  background: radial-gradient(circle, var(--glow-blue) 0%, transparent 65%);
+  background: radial-gradient(circle, var(--glow-blue) 0%, var(--glow-core) 32%, transparent 65%);
   border-radius: 50%; pointer-events: none;
   animation: heroGlowPulse 6s ease-in-out infinite;
 }
@@ -137,6 +145,7 @@ body {
   border-radius: 50%; pointer-events: none;
   animation: heroGlowFloat 8s ease-in-out infinite;
 }
+html.light .hero-page::after { opacity: 1.4; }
 .hero-grid {
   position: absolute; inset: 0;
   background-image:
@@ -158,12 +167,12 @@ body {
 }
 .hero-emoji-wrap::before {
   content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-  background: radial-gradient(circle at 30% 30%, var(--glow-blue) 0%, transparent 40%);
+  background: radial-gradient(circle at 30% 30%, var(--glow-core) 0%, transparent 40%);
   pointer-events: none;
 }
 .hero-emoji-wrap::after {
   content: ''; position: absolute; bottom: 0; left: 10%; width: 80%; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(86,156,214,0.4), transparent);
+  background: linear-gradient(90deg, transparent, var(--glow-ring), transparent);
 }
 .hero-emoji {
   font-size: clamp(56px, 12vw, 100px); font-weight: 200; color: var(--text);
@@ -172,7 +181,7 @@ body {
 }
 .hero-emoji .cursor {
   display: inline-block; animation: blink 1s steps(2) infinite;
-  color: var(--term-blue); text-shadow: 0 0 20px rgba(86,156,214,0.6);
+  color: var(--term-blue); text-shadow: 0 0 20px var(--glow-ring);
 }
 .hero-hello {
   font-size: clamp(16px, 3vw, 22px); font-weight: 300;
@@ -203,7 +212,7 @@ body {
 .desktop-page::before {
   content: ''; position: absolute; top: -100px; right: -100px;
   width: 400px; height: 400px;
-  background: radial-gradient(circle, var(--glow-blue) 0%, transparent 70%);
+  background: radial-gradient(circle, var(--glow-blue) 0%, var(--glow-core) 35%, transparent 70%);
   border-radius: 50%; pointer-events: none;
 }
 .desktop-page::after {
@@ -212,6 +221,8 @@ body {
   background: radial-gradient(circle, var(--glow-mint) 0%, transparent 70%);
   border-radius: 50%; pointer-events: none;
 }
+html.light .desktop-page::before { opacity: 1.3; }
+html.light .desktop-page::after { opacity: 1.3; }
 .mint-panel {
   width: 100%; max-width: 740px; height: 36px;
   background: var(--glass-bg);
@@ -302,6 +313,7 @@ body {
 .lt-green { color: var(--term-green); } .lt-blue { color: var(--term-blue); }
 .lt-yellow { color: var(--term-yellow); } .lt-purple { color: var(--term-purple); }
 .lt-dim { color: var(--term-dim); }
+.lt-swirl { color: var(--term-red); }
 .lt-cursor { display: inline-block; width: 7px; height: 14px; background: var(--term-green); vertical-align: middle; animation: blink 1s steps(2) infinite; }
 
 .mint-taskbar {
@@ -331,10 +343,11 @@ body {
 .about-page::before {
   content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
   width: min(600px, 70vw); height: min(600px, 70vw);
-  background: radial-gradient(circle, var(--glow-blue) 0%, transparent 65%);
+  background: radial-gradient(circle, var(--glow-blue) 0%, var(--glow-core) 32%, transparent 65%);
   border-radius: 50%; pointer-events: none;
   animation: heroGlowPulse 8s ease-in-out infinite;
 }
+html.light .about-page::before { opacity: 1.3; }
 .about-card {
   max-width: 540px; width: 100%;
   background: var(--glass-bg);
@@ -382,7 +395,7 @@ body {
   .avatar-orb { width: 48px; height: 48px; }
   .welcome-text .user { font-size: 14px; }
   .welcome-text .status { font-size: 10px; }
-  .live-term-body { padding: 12px; font-size: 11px; max-height: 320px; }
+  .live-term-body { padding: 12px; font-size: 10.5px; max-height: 320px; }
   .live-term-bar { padding: 5px 10px; }
   .live-term-dots span { width: 9px; height: 9px; }
   .live-term-title { font-size: 9px; padding-right: 35px; }
@@ -573,24 +586,24 @@ updateClock();
   var lines = [
     {html: U + '<span class="lt-cmd">neofetch</span>', delay: 400},
     {html: '', delay: 100},
-    {html:'<span class="lt-green">       ___</span>        <span class="lt-blue">ayowait</span><span class="lt-dim">@</span><span class="lt-blue">github</span>', delay: 40},
-    {html:'<span class="lt-green">      (.. \\</span>      <span class="lt-dim">-----------</span>', delay: 40},
-    {html:'<span class="lt-green">      (___ |</span>      <span class="lt-yellow">OS</span>: Ayowait OS 1.0 x86_64', delay: 40},
-    {html:'<span class="lt-green">      _  __)</span>      <span class="lt-yellow">Host</span>: GitHub Pages', delay: 40},
-    {html:'<span class="lt-green">     (____)</span>       <span class="lt-yellow">Kernel</span>: HTML5-CSS3-JS', delay: 40},
-    {html:'<span class="lt-green">    (______)</span>      <span class="lt-yellow">Uptime</span>: <span id="lt-uptime">0s</span>', delay: 40},
-    {html:'<span class="lt-green">   ___|___|__</span>     <span class="lt-yellow">Packages</span>: 42 (dpkg), 7 (npm)', delay: 40},
-    {html:'<span class="lt-green">  (___    ___)</span>    <span class="lt-yellow">Shell</span>: bash 5.2.15', delay: 40},
-    {html:'<span class="lt-green">  (___|  |___)</span>    <span class="lt-yellow">Resolution</span>: responsive', delay: 40},
-    {html:'<span class="lt-green">  (___|  |___)</span>    <span class="lt-yellow">DE</span>: Mint Glass 20.3', delay: 40},
-    {html:'<span class="lt-green">  (___|  |___)</span>    <span class="lt-yellow">WM</span>: Mutter (XTerm.js)', delay: 40},
-    {html:'<span class="lt-green">  (___|  |___)</span>    <span class="lt-yellow">Theme</span>: Dark / Minimal [GTK3]', delay: 40},
-    {html:'<span class="lt-green">  (___|  |___)</span>    <span class="lt-yellow">Icons</span>: Papirus-Dark', delay: 40},
-    {html:'<span class="lt-green">  (___|  |___)</span>    <span class="lt-yellow">Terminal</span>: gnome-terminal', delay: 40},
-    {html:'<span class="lt-green">  (___|  |___)</span>    <span class="lt-yellow">CPU</span>: render engine (virtual)', delay: 40},
-    {html:'<span class="lt-green">  (___|  |___)</span>    <span class="lt-yellow">GPU</span>: Canvas 2D / WebGL', delay: 40},
-    {html:'<span class="lt-green">  (___|  |___)</span>    <span class="lt-yellow">Memory</span>: 512MiB / 4096MiB', delay: 40},
-    {html:'<span class="lt-green">  (___|  |___)</span>    <span class="lt-yellow">Coffee</span>: <span class="lt-green">always</span>', delay: 40},
+    {html:'<span class="lt-swirl">         _       </span><span class="lt-blue">ayowait</span><span class="lt-dim">@</span><span class="lt-blue">github</span>', delay: 40},
+    {html:'<span class="lt-swirl">      © _©       </span><span class="lt-dim">-----------</span>', delay: 40},
+    {html:'<span class="lt-swirl">     (_) © _     </span><span class="lt-yellow">OS</span>: Ayowait OS 1.0 x86_64', delay: 40},
+    {html:'<span class="lt-swirl">    _   © (_)    </span><span class="lt-yellow">Host</span>: GitHub Pages', delay: 40},
+    {html:'<span class="lt-swirl">   (_) © _       </span><span class="lt-yellow">Kernel</span>: HTML5-CSS3-JS', delay: 40},
+    {html:'<span class="lt-swirl">      _ © (_)    </span><span class="lt-yellow">Uptime</span>: <span id="lt-uptime">0s</span>', delay: 40},
+    {html:'<span class="lt-swirl">   (_) © _       </span><span class="lt-yellow">Packages</span>: 42 (dpkg), 7 (npm)', delay: 40},
+    {html:'<span class="lt-swirl">      _ © (_)    </span><span class="lt-yellow">Shell</span>: bash 5.2.15', delay: 40},
+    {html:'<span class="lt-swirl">   (_) © _       </span><span class="lt-yellow">Resolution</span>: responsive', delay: 40},
+    {html:'<span class="lt-swirl">      _ © (_)    </span><span class="lt-yellow">DE</span>: Mint Glass 20.3', delay: 40},
+    {html:'<span class="lt-swirl">   (_) © _   _   </span><span class="lt-yellow">WM</span>: Mutter (XTerm.js)', delay: 40},
+    {html:'<span class="lt-swirl">      _ © (_)    </span><span class="lt-yellow">Theme</span>: Dark / Minimal [GTK3]', delay: 40},
+    {html:'<span class="lt-swirl">   (_) © _       </span><span class="lt-yellow">Icons</span>: Papirus-Dark', delay: 40},
+    {html:'<span class="lt-swirl">      _ © (_)    </span><span class="lt-yellow">Terminal</span>: gnome-terminal', delay: 40},
+    {html:'<span class="lt-swirl">   (_) © _       </span><span class="lt-yellow">CPU</span>: render engine (virtual)', delay: 40},
+    {html:'<span class="lt-swirl">      _ © (_)    </span><span class="lt-yellow">GPU</span>: Canvas 2D / WebGL', delay: 40},
+    {html:'<span class="lt-swirl">   (_) ©         </span><span class="lt-yellow">Memory</span>: 512MiB / 4096MiB', delay: 40},
+    {html:'<span class="lt-swirl">      ©          </span><span class="lt-yellow">Coffee</span>: <span class="lt-green">always</span>', delay: 40},
     {html: '', delay: 200},
     {html: U + '<span class="lt-cmd">dmesg | tail -6</span>', delay: 400},
     {html:'<span class="lt-dim">[    0.000000]</span> <span class="lt-output">Booting Ayowait OS on github.io ...</span>', delay: 90},
