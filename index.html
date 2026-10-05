@@ -104,9 +104,14 @@ body {
   to   { opacity:1; transform: translateY(0) scale(1); }
 }
 
-/* ============ 主题切换（Codex 同款三色点，位于 Mint 顶栏右侧） ============ */
+/* ============ 主题切换（Codex 同款三色点，右上角固定悬浮） ============ */
 .theme-dots {
+  position: fixed; top: 14px; right: 16px; z-index: 9999;
   display: flex; align-items: center; gap: 8px;
+  padding: 6px 10px; border-radius: 20px;
+  background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
 }
 .theme-dot {
   width: 13px; height: 13px; border-radius: 50%; border: none; padding: 0;
@@ -449,10 +454,10 @@ html.light .about-page::before { opacity: 1.3; }
       </div>
     </div>
     <div class="mint-panel-center">Ayowait OS</div>
-    <div class="mint-panel-right theme-dots">
-      <button class="theme-dot dot-red"    data-theme="dark"  aria-label="Dark theme"  title="深色"></button>
-      <button class="theme-dot dot-yellow" data-theme="auto"  aria-label="Auto theme"  title="跟随系统"></button>
-      <button class="theme-dot dot-green"  data-theme="light" aria-label="Light theme" title="浅色"></button>
+    <div class="mint-panel-right">
+      <span class="icon">●</span>
+      <span class="icon">☷</span>
+      <span class="icon">⚙</span>
     </div>
   </div>
 
@@ -586,24 +591,23 @@ updateClock();
   var lines = [
     {html: U + '<span class="lt-cmd">neofetch</span>', delay: 400},
     {html: '', delay: 100},
-    {html:'<span class="lt-swirl">         _       </span><span class="lt-blue">ayowait</span><span class="lt-dim">@</span><span class="lt-blue">github</span>', delay: 40},
-    {html:'<span class="lt-swirl">      © _©       </span><span class="lt-dim">-----------</span>', delay: 40},
-    {html:'<span class="lt-swirl">     (_) © _     </span><span class="lt-yellow">OS</span>: Ayowait OS 1.0 x86_64', delay: 40},
-    {html:'<span class="lt-swirl">    _   © (_)    </span><span class="lt-yellow">Host</span>: GitHub Pages', delay: 40},
-    {html:'<span class="lt-swirl">   (_) © _       </span><span class="lt-yellow">Kernel</span>: HTML5-CSS3-JS', delay: 40},
-    {html:'<span class="lt-swirl">      _ © (_)    </span><span class="lt-yellow">Uptime</span>: <span id="lt-uptime">0s</span>', delay: 40},
-    {html:'<span class="lt-swirl">   (_) © _       </span><span class="lt-yellow">Packages</span>: 42 (dpkg), 7 (npm)', delay: 40},
-    {html:'<span class="lt-swirl">      _ © (_)    </span><span class="lt-yellow">Shell</span>: bash 5.2.15', delay: 40},
-    {html:'<span class="lt-swirl">   (_) © _       </span><span class="lt-yellow">Resolution</span>: responsive', delay: 40},
-    {html:'<span class="lt-swirl">      _ © (_)    </span><span class="lt-yellow">DE</span>: Mint Glass 20.3', delay: 40},
-    {html:'<span class="lt-swirl">   (_) © _   _   </span><span class="lt-yellow">WM</span>: Mutter (XTerm.js)', delay: 40},
-    {html:'<span class="lt-swirl">      _ © (_)    </span><span class="lt-yellow">Theme</span>: Dark / Minimal [GTK3]', delay: 40},
-    {html:'<span class="lt-swirl">   (_) © _       </span><span class="lt-yellow">Icons</span>: Papirus-Dark', delay: 40},
-    {html:'<span class="lt-swirl">      _ © (_)    </span><span class="lt-yellow">Terminal</span>: gnome-terminal', delay: 40},
-    {html:'<span class="lt-swirl">   (_) © _       </span><span class="lt-yellow">CPU</span>: render engine (virtual)', delay: 40},
-    {html:'<span class="lt-swirl">      _ © (_)    </span><span class="lt-yellow">GPU</span>: Canvas 2D / WebGL', delay: 40},
-    {html:'<span class="lt-swirl">   (_) ©         </span><span class="lt-yellow">Memory</span>: 512MiB / 4096MiB', delay: 40},
-    {html:'<span class="lt-swirl">      ©          </span><span class="lt-yellow">Coffee</span>: <span class="lt-green">always</span>', delay: 40},
+    {html:'<span class="lt-swirl">       _,met$$$$$gg.      </span><span class="lt-blue">ayowait</span><span class="lt-dim">@</span><span class="lt-blue">github</span>', delay: 40},
+    {html:'<span class="lt-swirl">    ,g$$$$$$$$$$$$$$$P.   </span><span class="lt-dim">-----------</span>', delay: 40},
+    {html:'<span class="lt-swirl">  ,g$$P"        """Y$.".  </span><span class="lt-yellow">OS</span>: Ayowait OS 1.0 x86_64', delay: 40},
+    {html:'<span class="lt-swirl"> ,$$P\'              `$$$.  </span><span class="lt-yellow">Host</span>: GitHub Pages', delay: 40},
+    {html:'<span class="lt-swirl">\',$$P       ,ggs.     `$$b:  </span><span class="lt-yellow">Kernel</span>: HTML5-CSS3-JS', delay: 40},
+    {html:'<span class="lt-swirl">`d$$\'     ,$P\'   .    $$$  </span><span class="lt-yellow">Uptime</span>: <span id="lt-uptime">0s</span>', delay: 40},
+    {html:'<span class="lt-swirl"> $$P      d$\'     ,    $$P  </span><span class="lt-yellow">Packages</span>: 42 (dpkg), 7 (npm)', delay: 40},
+    {html:'<span class="lt-swirl"> $$:      $.   -    ,d$$\'  </span><span class="lt-yellow">Shell</span>: bash 5.2.15', delay: 40},
+    {html:'<span class="lt-swirl"> $$;      Y$b._   _,d$P\'  </span><span class="lt-yellow">Resolution</span>: responsive', delay: 40},
+    {html:'<span class="lt-swirl"> Y$$.    `.`"Y$$$$P"\'     </span><span class="lt-yellow">DE</span>: Mint Glass 20.3', delay: 40},
+    {html:'<span class="lt-swirl"> `$$b      "-.__          </span><span class="lt-yellow">WM</span>: Mutter (XTerm.js)', delay: 40},
+    {html:'<span class="lt-swirl">  `Y$$                    </span><span class="lt-yellow">Theme</span>: Dark / Minimal [GTK3]', delay: 40},
+    {html:'<span class="lt-swirl">   `Y$$.                  </span><span class="lt-yellow">Icons</span>: Papirus-Dark', delay: 40},
+    {html:'<span class="lt-swirl">     `$$b.                </span><span class="lt-yellow">Terminal</span>: gnome-terminal', delay: 40},
+    {html:'<span class="lt-swirl">       `Y$$b.             </span><span class="lt-yellow">CPU</span>: render engine (virtual)', delay: 40},
+    {html:'<span class="lt-swirl">          `"Y$b._         </span><span class="lt-yellow">GPU</span>: Canvas 2D / WebGL', delay: 40},
+    {html:'<span class="lt-swirl">              `"""        </span><span class="lt-yellow">Coffee</span>: <span class="lt-green">always</span>', delay: 40},
     {html: '', delay: 200},
     {html: U + '<span class="lt-cmd">dmesg | tail -6</span>', delay: 400},
     {html:'<span class="lt-dim">[    0.000000]</span> <span class="lt-output">Booting Ayowait OS on github.io ...</span>', delay: 90},
