@@ -96,15 +96,9 @@ body {
   to   { opacity:1; transform: translateY(0) scale(1); }
 }
 
-/* ============ 主题切换按钮（Codex 同款三色点，右上角常驻） ============ */
+/* ============ 主题切换（Codex 同款三色点，位于 Mint 顶栏右侧） ============ */
 .theme-dots {
-  position: fixed; top: 20px; right: 20px; z-index: 999;
   display: flex; align-items: center; gap: 8px;
-  padding: 8px 10px; border-radius: 999px;
-  background: var(--glass-bg);
-  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--glass-border);
-  transition: background 0.4s ease, border-color 0.4s ease;
 }
 .theme-dot {
   width: 13px; height: 13px; border-radius: 50%; border: none; padding: 0;
@@ -115,7 +109,7 @@ body {
 .theme-dot:hover { transform: scale(1.25); }
 .theme-dot:active { transform: scale(0.95); }
 /* 激活态：外圈光环 */
-.theme-dot.on { box-shadow: 0 0 0 2px var(--bg), 0 0 0 3.5px var(--dot-ring), 0 0 10px 1px currentColor; }
+.theme-dot.on { box-shadow: 0 0 0 2px var(--bg-soft), 0 0 0 3.5px var(--dot-ring), 0 0 10px 1px currentColor; }
 .dot-red    { background: #ff5f56; color: #ff5f56; }
 .dot-yellow { background: #ffbd2e; color: #ffbd2e; }
 .dot-green  { background: #27c93f; color: #27c93f; }
@@ -377,8 +371,6 @@ body {
   .hero-emoji-wrap { padding: 18px 48px; margin-bottom: 36px; border-radius: 20px; }
   .hero-hello { font-size: 15px; }
   .scroll-gradient { height: 80px; }
-  .theme-dots { top: 14px; right: 14px; padding: 6px 8px; gap: 7px; }
-  .theme-dot { width: 12px; height: 12px; }
   .desktop-page { padding: 24px 10px 0; }
   .mint-panel { height: 32px; font-size: 10px; padding: 0 10px; gap: 10px; }
   .mint-panel-center { font-size: 11px; }
@@ -444,8 +436,10 @@ body {
       </div>
     </div>
     <div class="mint-panel-center">Ayowait OS</div>
-    <div class="mint-panel-right">
-      <span class="icon">&#9679;</span><span class="icon">&#9883;</span><span class="icon">&#9207;</span>
+    <div class="mint-panel-right theme-dots">
+      <button class="theme-dot dot-red"    data-theme="dark"  aria-label="Dark theme"  title="深色"></button>
+      <button class="theme-dot dot-yellow" data-theme="auto"  aria-label="Auto theme"  title="跟随系统"></button>
+      <button class="theme-dot dot-green"  data-theme="light" aria-label="Light theme" title="浅色"></button>
     </div>
   </div>
 
