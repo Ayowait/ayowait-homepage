@@ -336,14 +336,21 @@ html.light .desktop-page::after { opacity: 1.3; }
   margin: 0; min-width: 0; color: var(--term-red);
   font: inherit; font-size: 0.9em; line-height: 1.06; letter-spacing: 0;
   white-space: pre; overflow: hidden;
+  animation: fadeIn 0.45s ease both;
 }
 .lt-system-info { min-width: 0; white-space: normal; }
+@keyframes ltInfoIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 .lt-info-line {
   min-height: 1.5em; white-space: nowrap; overflow: hidden;
   text-overflow: ellipsis; color: rgba(255,255,255,0.82);
+  opacity: 0; animation: ltInfoIn 0.32s ease forwards;
 }
 .lt-info-line .lt-yellow { color: var(--term-yellow); }
 .lt-info-head { color: var(--term-blue); }
+@media (prefers-reduced-motion: reduce) {
+  .lt-debian-logo { animation: none; }
+  .lt-info-line { animation: none; opacity: 1; }
+}
 .lt-cursor { display: inline-block; width: 7px; height: 14px; background: var(--term-green); vertical-align: middle; animation: blink 1s steps(2) infinite; }
 
 .mint-taskbar {
@@ -613,7 +620,7 @@ updateClock();
   var lines = [
     {html: U + '<span class="lt-cmd">neofetch</span>', delay: 400},
     {html: '', delay: 100},
-    {html:'<div class="lt-neofetch"><pre class="lt-debian-logo">       _,met$$$$$gg.&#10;    ,g$$$$$$$$$$$$$$$P.&#10;  ,g$$P"        """Y$.".&#10; ,$$P&#39;              `$$$.&#10;&#39;,$$P       ,ggs.     `$$b:&#10;`d$$&#39;     ,$P&#39;   .    $$$&#10; $$P      d$&#39;     ,    $$P&#10; $$:      $.   -    ,d$$&#39;&#10; $$;      Y$b._   _,d$P&#39;&#10; Y$$.    `.`"Y$$$$P"&#39;&#10; `$$b      "-.__&#10;  `Y$$&#10;   `Y$$.&#10;     `$$b.&#10;       `Y$$b.&#10;          `"Y$b._&#10;              `"""</pre><div class="lt-system-info"><div class="lt-info-line lt-info-head"><span class="lt-blue">ayowait</span><span class="lt-dim">@</span><span class="lt-blue">github</span></div><div class="lt-info-line"><span class="lt-dim">-----------</span></div><div class="lt-info-line"><span class="lt-yellow">OS</span>: Ayowait OS 1.0 x86_64</div><div class="lt-info-line"><span class="lt-yellow">Host</span>: GitHub Pages</div><div class="lt-info-line"><span class="lt-yellow">Kernel</span>: HTML5-CSS3-JS</div><div class="lt-info-line"><span class="lt-yellow">Uptime</span>: <span id="lt-uptime">0s</span></div><div class="lt-info-line"><span class="lt-yellow">Packages</span>: 42 (dpkg), 7 (npm)</div><div class="lt-info-line"><span class="lt-yellow">Shell</span>: bash 5.2.15</div><div class="lt-info-line"><span class="lt-yellow">Resolution</span>: responsive</div><div class="lt-info-line"><span class="lt-yellow">DE</span>: Mint Glass 20.3</div><div class="lt-info-line"><span class="lt-yellow">WM</span>: Mutter (XTerm.js)</div><div class="lt-info-line"><span class="lt-yellow">Theme</span>: Dark / Minimal [GTK3]</div><div class="lt-info-line"><span class="lt-yellow">Icons</span>: Papirus-Dark</div><div class="lt-info-line"><span class="lt-yellow">Terminal</span>: gnome-terminal</div><div class="lt-info-line"><span class="lt-yellow">CPU</span>: render engine (virtual)</div><div class="lt-info-line"><span class="lt-yellow">GPU</span>: Canvas 2D / WebGL</div><div class="lt-info-line"><span class="lt-yellow">Coffee</span>: <span class="lt-green">always</span></div></div></div>', delay: 80},
+    {html:'<div class="lt-neofetch"><pre class="lt-debian-logo">       _,met$$$$$gg.&#10;    ,g$$$$$$$$$$$$$$$P.&#10;  ,g$$P"        """Y$.".&#10; ,$$P&#39;              `$$$.&#10;&#39;,$$P       ,ggs.     `$$b:&#10;`d$$&#39;     ,$P&#39;   .    $$$&#10; $$P      d$&#39;     ,    $$P&#10; $$:      $.   -    ,d$$&#39;&#10; $$;      Y$b._   _,d$P&#39;&#10; Y$$.    `.`"Y$$$$P"&#39;&#10; `$$b      "-.__&#10;  `Y$$&#10;   `Y$$.&#10;     `$$b.&#10;       `Y$$b.&#10;          `"Y$b._&#10;              `"""</pre><div class="lt-system-info"><div class="lt-info-line lt-info-head" style="animation-delay:0.35s"><span class="lt-blue">ayowait</span><span class="lt-dim">@</span><span class="lt-blue">github</span></div><div class="lt-info-line" style="animation-delay:0.43s"><span class="lt-dim">-----------</span></div><div class="lt-info-line" style="animation-delay:0.51s"><span class="lt-yellow">OS</span>: Ayowait OS 1.0 x86_64</div><div class="lt-info-line" style="animation-delay:0.59s"><span class="lt-yellow">Host</span>: GitHub Pages</div><div class="lt-info-line" style="animation-delay:0.67s"><span class="lt-yellow">Kernel</span>: HTML5-CSS3-JS</div><div class="lt-info-line" style="animation-delay:0.75s"><span class="lt-yellow">Uptime</span>: <span id="lt-uptime">0s</span></div><div class="lt-info-line" style="animation-delay:0.83s"><span class="lt-yellow">Packages</span>: 42 (dpkg), 7 (npm)</div><div class="lt-info-line" style="animation-delay:0.91s"><span class="lt-yellow">Shell</span>: bash 5.2.15</div><div class="lt-info-line" style="animation-delay:0.99s"><span class="lt-yellow">Resolution</span>: responsive</div><div class="lt-info-line" style="animation-delay:1.07s"><span class="lt-yellow">DE</span>: Mint Glass 20.3</div><div class="lt-info-line" style="animation-delay:1.15s"><span class="lt-yellow">WM</span>: Mutter (XTerm.js)</div><div class="lt-info-line" style="animation-delay:1.23s"><span class="lt-yellow">Theme</span>: Dark / Minimal [GTK3]</div><div class="lt-info-line" style="animation-delay:1.31s"><span class="lt-yellow">Icons</span>: Papirus-Dark</div><div class="lt-info-line" style="animation-delay:1.39s"><span class="lt-yellow">Terminal</span>: gnome-terminal</div><div class="lt-info-line" style="animation-delay:1.47s"><span class="lt-yellow">CPU</span>: render engine (virtual)</div><div class="lt-info-line" style="animation-delay:1.55s"><span class="lt-yellow">GPU</span>: Canvas 2D / WebGL</div><div class="lt-info-line" style="animation-delay:1.63s"><span class="lt-yellow">Coffee</span>: <span class="lt-green">always</span></div></div></div>', delay: 80},
     {html: '', delay: 200},
     {html: U + '<span class="lt-cmd">dmesg | tail -6</span>', delay: 400},
     {html:'<span class="lt-dim">[    0.000000]</span> <span class="lt-output">Booting Ayowait OS on github.io ...</span>', delay: 90},
